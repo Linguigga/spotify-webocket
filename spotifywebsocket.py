@@ -41,14 +41,16 @@ async def on_player_state_change(d):
     artistlist = d['event']['state']['item']['artists']
     playing = bool(d['event']['state']['is_playing'])
     volume = d['event']['state']['device']['volume_percent']
+    devname = d['event']['state']['device']['name']
+    devtype = d['event']['state']['device']['type']
     #print(current)
     for thing in artistlist:
         artistnames.append(thing['name'])
         artists = ', '.join(artistnames)
     if playing:
-        printer(f"Playing: {Fore.LIGHTRED_EX}{current}{Fore.LIGHTMAGENTA_EX} By {Fore.LIGHTCYAN_EX}{artists} {Fore.LIGHTGREEN_EX}at {volume}% volume. ")
+        printer(f"Playing: {Fore.LIGHTRED_EX}{current}{Fore.LIGHTMAGENTA_EX} By {Fore.LIGHTCYAN_EX}{artists} {Fore.LIGHTGREEN_EX}at {volume}% volume{Fore.YELLOW} on {devtype}: {devname} ")
     else:
-        printer(f"Stopped: {Fore.LIGHTRED_EX}{current}{Fore.LIGHTMAGENTA_EX} By {Fore.LIGHTCYAN_EX}{artists} {Fore.LIGHTGREEN_EX}at {volume}% volume.")
+        printer(f"Stopped: {Fore.LIGHTRED_EX}{current}{Fore.LIGHTMAGENTA_EX} By {Fore.LIGHTCYAN_EX}{artists} {Fore.LIGHTGREEN_EX}at {volume}% volume{Fore.YELLOW} on {devtype}: {devname} ")
 
 
 async def gateway():
