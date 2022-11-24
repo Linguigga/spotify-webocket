@@ -40,14 +40,15 @@ async def on_player_state_change(d):
     current = d['event']['state']['item']['name']
     artistlist = d['event']['state']['item']['artists']
     playing = bool(d['event']['state']['is_playing'])
+    volume = d['event']['state']['device']['volume_percent']
     #print(current)
     for thing in artistlist:
         artistnames.append(thing['name'])
         artists = ', '.join(artistnames)
     if playing:
-        printer(f"Playing: {current} By {Fore.LIGHTCYAN_EX}{artists}")
+        printer(f"Playing: {Fore.LIGHTRED_EX}{current}{Fore.LIGHTMAGENTA_EX} By {Fore.LIGHTCYAN_EX}{artists} {Fore.LIGHTGREEN_EX}at {volume}% volume. ")
     else:
-        printer(f"Stopped: {current} By {Fore.LIGHTCYAN_EX}{artists}")
+        printer(f"Stopped: {Fore.LIGHTRED_EX}{current}{Fore.LIGHTMAGENTA_EX} By {Fore.LIGHTCYAN_EX}{artists} {Fore.LIGHTGREEN_EX}at {volume}% volume.")
 
 
 async def gateway():
@@ -55,7 +56,7 @@ async def gateway():
     async with websockets.connect(f'wss://dealer.spotify.com/?access_token={auth}') as ws:
         connect_id = json.loads(await ws.recv())['headers']['Spotify-Connection-Id']
         notifying = json.loads(requests.put(f'https://api.spotify.com/v1/me/notifications/player?connection_id={connect_id}&access_token={auth}').text)
-        print(notifying['message'])
+        print(f"{Fore.GREEN}{notifying['message']}{Fore.RESET}")
         while True:
             try:
                 raw = json.loads(await ws.recv())['payloads'][0]['events'][0]
